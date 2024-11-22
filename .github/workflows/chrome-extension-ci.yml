@@ -3,8 +3,16 @@ name: chrome-extension CI
 on:
   push:
     branches: [main]
+    paths:
+      - "extensions/chrome_v1/**"
   pull_request:
     branches: [main]
+    paths:
+      - "extensions/chrome_v1/**"
+
+defaults:
+  run:
+    working-directory: ./extensions/chrome_v1
 
 jobs:
   lint-and-format:
@@ -56,5 +64,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: chrome-extension
-          path: dist/
+          path: extensions/chrome_v1/dist/
           if-no-files-found: error
