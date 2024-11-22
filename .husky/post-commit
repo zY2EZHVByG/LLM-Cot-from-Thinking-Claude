@@ -7,6 +7,9 @@ if git log -1 --name-only --pretty=format: | grep "^extensions/chrome_v1" > /dev
   echo "Changes detected, fetching..."
   git fetch
   echo "Fetch complete"
+  echo "Pulling changes..."
+  git pull
+  echo "Pull complete"
 fi
 
 # TODO: config this for other extensions too
