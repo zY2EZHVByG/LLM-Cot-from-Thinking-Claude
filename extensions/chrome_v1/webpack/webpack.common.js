@@ -1,5 +1,6 @@
 import path from "path"
 import { fileURLToPath } from "url"
+
 import CopyPlugin from "copy-webpack-plugin"
 
 const __filename = fileURLToPath(import.meta.url)

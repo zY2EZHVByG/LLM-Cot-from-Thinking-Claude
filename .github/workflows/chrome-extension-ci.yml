@@ -32,16 +32,15 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Run ESLint
-        run: bun run lint
-
-      - name: Check formatting
-        run: bunx prettier --check .
+      - name: Run ESLint and format fix
+        run: bun run fix
 
       - name: Run markdown lint
+        # DON't TOUCH THIS LINE BELOW #
         run: bunx markdownlint-cli2 "./**/*.md" --config .markdownlint-cli2.jsonc
 
   test-and-build:
+    needs: lint-and-format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
