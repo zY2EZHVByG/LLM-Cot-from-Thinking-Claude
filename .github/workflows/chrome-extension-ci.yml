@@ -64,16 +64,36 @@ jobs:
       - name: Zip Extension
         run: zip -r chrome-extension.zip dist/
 
-      - name: Generate version
-        id: version
-        run: echo "version=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
-
+      # Automatically increments the patch version (e.g., 1.0.0 -> 1.0.1)
+      # and creates a release
+      - name: Check existing tag
+        id: check_tag
+        run: |
+          current_version=$(node -p "require('./package.json').version")
+          if git ls-remote --tags origin refs/tags/v$current_version >/dev/null; then
+            # If tag exists, increment patch version
+            IFS='.' read -r major minor patch <<< "$current_version"
+            new_version="$major.$minor.$((patch + 1))"
+            echo "version=$new_version" >> $GITHUB_OUTPUT
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            # Update package.json with new version
+            sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" package.json
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions[bot]"
+            git add package.json
+            git commit -m "chore: bump version to $new_version [skip ci]"
+            git push
+          else
+            echo "version=$current_version" >> $GITHUB_OUTPUT
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
       - name: Create Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
-          name: Release ${{ steps.version.outputs.version }}
-          tag_name: v${{ steps.version.outputs.version }}
+          name: Chrome Extension v${{ steps.check_tag.outputs.version }}
+          tag_name: v${{ steps.check_tag.outputs.version }}
           files: extensions/chrome_v1/chrome-extension.zip
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_unmatched_files: true
