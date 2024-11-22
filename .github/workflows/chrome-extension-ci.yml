@@ -42,6 +42,8 @@ jobs:
   test-and-build:
     needs: lint-and-format
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -59,9 +61,19 @@ jobs:
       - name: Build extension
         run: bun run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+      - name: Zip Extension
+        run: zip -r chrome-extension.zip dist/
+
+      - name: Generate version
+        id: version
+        run: echo "version=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
         with:
-          name: chrome-extension
-          path: extensions/chrome_v1/dist/
-          if-no-files-found: error
+          name: Release ${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
+          files: extensions/chrome_v1/chrome-extension.zip
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
