@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# DON'T TOUCH THIS FILE IF YOU DON'T KNOW WHAT YOU ARE DOING
+
+# Check if there are changes in extensions directory
+if git diff --cached --name-only | grep "^extensions/chrome_v1" > /dev/null; then
+  cd extensions/chrome_v1 && bun run fix && bun run lint:staged 
+fi
+
+# TODO: config this for other extensions too

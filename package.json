@@ -1,0 +1,11 @@
+{
+  "name": "thinking-claude-root",
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "husky": "^9.1.7"
+  }
+}
