@@ -3,10 +3,11 @@
 
 # DON'T TOUCH THIS FILE IF YOU DON'T KNOW WHAT YOU ARE DOING
 
-# Check if the last commit was in extensions/chrome_v1
+echo "Checking for changes in chrome_v1..."
 if git log -1 --name-only --pretty=format: | grep "^extensions/chrome_v1" > /dev/null; then
-  echo "Changes detected in chrome_v1, running git fetch..."
+  echo "Changes detected, fetching..."
   git fetch
+  echo "Fetch complete"
 fi
 
 # TODO: config this for other extensions too

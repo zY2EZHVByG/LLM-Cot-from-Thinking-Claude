@@ -4,8 +4,19 @@
 # DON'T TOUCH THIS FILE IF YOU DON'T KNOW WHAT YOU ARE DOING
 
 # Check if there are changes in extensions directory
-if git diff --cached --name-only | grep "^extensions/chrome_v1" > /dev/null; then
-  cd extensions/chrome_v1 && bun run fix && bun run lint:staged 
+if ! git diff --cached --name-only | grep "^extensions/chrome_v1" > /dev/null; then
+  echo "No changes in chrome_v1"
+  exit 0
+fi
+
+if ! cd extensions/chrome_v1; then
+  echo "Failed to change directory"
+  exit 1
+fi
+
+if ! bun run fix && bun run lint:staged; then
+  echo "Fix or lint failed"
+  exit 1
 fi
 
 # TODO: config this for other extensions too
