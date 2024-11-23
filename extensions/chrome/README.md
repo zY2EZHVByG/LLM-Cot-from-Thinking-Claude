@@ -2,7 +2,7 @@
 
 A Chrome extension that enhances Claude's thinking process, making it more human-like and transparent.
 
-> **Important Notice**: The original Chrome extension (`chrome_v0`) has been deprecated. This is the new rewritten version (`chrome_v1`) with improved architecture and modern tech stack. If you're using the old version, please update to this new version for better performance and continued support.
+> **Important Notice**: The original Chrome extension (`chrome_v0`) has been deprecated. This is the new rewritten version (`chrome`) with improved architecture and modern tech stack. If you're using the old version, please update to this new version for better performance and continued support.
 
 ## How to Use 🚀
 
@@ -33,7 +33,7 @@ A Chrome extension that enhances Claude's thinking process, making it more human
    ```bash
    # Clone the repository
    git clone https://github.com/richards199999/Thinking-Claude.git
-   cd Thinking-Claude/extensions/chrome_v1
+   cd Thinking-Claude/extensions/chrome
 
    # Install dependencies
    bun install
@@ -167,7 +167,7 @@ bun --version
    git clone https://github.com/richards199999/Thinking-Claude.git
 
    # Go to the extension directory
-   cd extensions/chrome_v1
+   cd extensions/chrome
 
    # Install project dependencies
    bun install
@@ -203,7 +203,7 @@ bun run fix
 ## Project Organization 📁
 
 ```
-chrome_v1/
+chrome/
 ├── src/             # Your source code goes here
 ├── public/            # Built extension (created after running build)
 │   ├── manifest.json # Extension configuration

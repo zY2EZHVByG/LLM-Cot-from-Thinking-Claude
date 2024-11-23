@@ -15,16 +15,16 @@ We've completely rewritten the extension with:
 
 ### How to Update?
 
-Please switch to our new version (`chrome_v1`):
+Please switch to our new version (`chrome`):
 
 1. Uninstall this version (`chrome_v0`) from Chrome
-2. Visit our [Latest Releases](https://github.com/richards199999/Thinking-Claude/releases) or refer to the [README.md](https://github.com/richards199999/Thinking-Claude/tree/main/extensions/chrome_v1/README.md) in `extensions/chrome_v1`
+2. Visit our [Latest Releases](https://github.com/richards199999/Thinking-Claude/releases) or refer to the [README.md](https://github.com/richards199999/Thinking-Claude/tree/main/extensions/chrome/README.md) in `extensions/chrome`
 3. Download and install the new version
 
 For installation instructions and documentation, see:
 
-- [New Extension Documentation](https://github.com/richards199999/Thinking-Claude/tree/main/extensions/chrome_v1/README.md)
-- [Changelog](https://github.com/richards199999/Thinking-Claude/tree/main/extensions/chrome_v1/CHANGELOG.md)
+- [New Extension Documentation](https://github.com/richards199999/Thinking-Claude/tree/main/extensions/chrome/README.md)
+- [Changelog](https://github.com/richards199999/Thinking-Claude/tree/main/extensions/chrome/CHANGELOG.md)
 
 ## Support
 

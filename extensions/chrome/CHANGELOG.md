@@ -4,7 +4,7 @@
 
 ### Important Notice 🔄
 
-The original Chrome extension (now referred to as `chrome_v0`) has been deprecated and its development has been discontinued. This changelog tracks the new rewritten version (`chrome_v1`) which offers improved architecture, better performance, and enhanced maintainability.
+The original Chrome extension (now referred to as `chrome_v0`) has been deprecated and its development has been discontinued. This changelog tracks the new rewritten version (`chrome`) which offers improved architecture, better performance, and enhanced maintainability.
 
 ### Changed
 

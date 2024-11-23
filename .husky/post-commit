@@ -2,8 +2,8 @@
 
 # DON'T TOUCH THIS FILE IF YOU DON'T KNOW WHAT YOU ARE DOING
 
-echo "Checking for changes in chrome_v1..."
-if git log -1 --name-only --pretty=format: | grep "^extensions/chrome_v1" > /dev/null; then
+echo "Checking for changes in chrome..."
+if git log -1 --name-only --pretty=format: | grep "^extensions/chrome" > /dev/null; then
   echo "Changes detected, fetching..."
   git fetch
   echo "Fetch complete"

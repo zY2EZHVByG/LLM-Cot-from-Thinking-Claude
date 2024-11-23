@@ -4,15 +4,15 @@ on:
   push:
     branches: [main]
     paths:
-      - "extensions/chrome_v1/**"
+      - "extensions/chrome/**"
   pull_request:
     branches: [main]
     paths:
-      - "extensions/chrome_v1/**"
+      - "extensions/chrome/**"
 
 defaults:
   run:
-    working-directory: ./extensions/chrome_v1
+    working-directory: ./extensions/chrome
 
 jobs:
   lint-and-format:
@@ -95,7 +95,7 @@ jobs:
         with:
           name: Chrome Extension v${{ steps.check_tag.outputs.version }}
           tag_name: v${{ steps.check_tag.outputs.version }}
-          files: extensions/chrome_v1/chrome-extension.zip
+          files: extensions/chrome/chrome-extension.zip
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_unmatched_files: true

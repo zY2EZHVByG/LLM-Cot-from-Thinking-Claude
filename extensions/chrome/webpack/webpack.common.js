@@ -16,7 +16,15 @@ export default {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              configFile: path.resolve(__dirname, "..", "tsconfig.json"),
+              transpileOnly: true,
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {
@@ -27,6 +35,9 @@ export default {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+    alias: {
+      "@": path.resolve(__dirname, "..", "src"),
+    },
   },
   output: {
     path: path.resolve(__dirname, "..", "dist"),
