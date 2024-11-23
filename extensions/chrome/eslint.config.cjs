@@ -1,5 +1,13 @@
 /** @type {import('eslint').Config[]} */
 module.exports = [
+  {
+    ignores: [
+      "**/dist/**",
+      "**/node_modules/**",
+      "**/coverage/**",
+      "**/*.config.js",
+    ],
+  },
   require("@eslint/js").configs.recommended,
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
