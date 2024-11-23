@@ -1,6 +1,6 @@
 {
   "name": "thinking-claude",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "Chrome extension for letting Claude think like a real human",
   "type": "module",
   "scripts": {
