@@ -13,8 +13,8 @@ if ! cd extensions/chrome_v1; then
   exit 1
 fi
 
-if ! bun run fix && bun run lint:staged; then
-  echo "Fix or lint failed"
+if ! bun run lint:staged; then
+  echo "Lint failed"
   exit 1
 fi
 
