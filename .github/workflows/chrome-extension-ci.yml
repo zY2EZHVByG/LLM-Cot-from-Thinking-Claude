@@ -66,6 +66,7 @@ jobs:
 
       # Automatically increments the patch version (e.g., 1.0.0 -> 1.0.1)
       # and creates a release
+      # Only increment patch version for non-major versions
       - name: Check existing tag
         id: check_tag
         run: |
