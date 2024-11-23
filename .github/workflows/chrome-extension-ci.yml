@@ -1,0 +1,106 @@
+name: chrome-extension CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "extensions/chrome/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "extensions/chrome/**"
+
+defaults:
+  run:
+    working-directory: ./extensions/chrome
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run ESLint and format fix
+        run: bun run fix
+
+      - name: Run markdown lint
+        # DON't TOUCH THIS LINE BELOW #
+        run: bunx markdownlint-cli2 "./**/*.md" --config .markdownlint-cli2.jsonc
+
+  test-and-build:
+    needs: lint-and-format
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run tests
+        run: bun test
+
+      - name: Build extension
+        run: bun run build
+
+      - name: Zip Extension
+        run: zip -r chrome-extension.zip dist/
+
+      # Automatically increments the patch version (e.g., 1.0.0 -> 1.0.1)
+      # and creates a release
+      # Only increment patch version for non-major versions
+      - name: Check existing tag
+        id: check_tag
+        run: |
+          current_version=$(node -p "require('./package.json').version")
+          if [[ "$current_version" =~ ^[0-9]+\.0\.0$ ]]; then
+            # Don't increment major versions (x.0.0)
+            echo "version=$current_version" >> $GITHUB_OUTPUT
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          elif git ls-remote --tags origin refs/tags/v$current_version >/dev/null; then
+            # If tag exists and it's not a major version, increment patch
+            IFS='.' read -r major minor patch <<< "$current_version"
+            new_version="$major.$minor.$((patch + 1))"
+            echo "version=$new_version" >> $GITHUB_OUTPUT
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            # Update package.json with new version
+            sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" package.json
+            # Update manifest.json with new version
+            sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" public/manifest.json
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions[bot]"
+            git add package.json public/manifest.json
+            git commit -m "chore: bump version to $new_version [skip ci]"
+            git push
+          else
+            echo "version=$current_version" >> $GITHUB_OUTPUT
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Create Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Chrome Extension v${{ steps.check_tag.outputs.version }}
+          tag_name: v${{ steps.check_tag.outputs.version }}
+          files: extensions/chrome/chrome-extension.zip
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_unmatched_files: true
