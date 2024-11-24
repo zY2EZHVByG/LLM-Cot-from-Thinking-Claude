@@ -1,5 +1,16 @@
 # Changelog
 
+## 2024-11-24
+
+- Update v5 to latest 20241124 version!
+    - Modify some examples;
+    - Change some wording for better model's understanding.
+
+- Update the previous v4-Lite-20241118 version to 20241124 version with impassive language guidelines.
+
+- Update the current v4-Lite version into a new v5-Lite version of Thinking Claude instructions.
+    - Restructure the instructions using XML tags.
+
 ## 2024-11-23
 
 - New version of Thinking Claude instructions v5 (Experimental)!
