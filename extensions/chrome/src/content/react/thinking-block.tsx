@@ -9,7 +9,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 
-interface ThinkingProcessProps {
+interface ThinkingBlockProps {
   containerRef: HTMLElement
   isStreaming: boolean
 }
@@ -31,7 +31,7 @@ const CodeViewer = ({ className, originalElement }: CodeViewerProps) => {
 export function ThinkingProcess({
   containerRef,
   isStreaming,
-}: ThinkingProcessProps) {
+}: ThinkingBlockProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [codeElement, setCodeElement] = useState<HTMLElement | null>(null)
   const [isCopied, setIsCopied] = useState(false)

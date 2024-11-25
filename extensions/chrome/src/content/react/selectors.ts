@@ -2,69 +2,80 @@
  * 1. responseContainer: '[data-is-streaming]'
  *    The outermost container div with data-is-streaming attribute, containing the entire Claude response including thinking process, message, and footer. Has gradient background and rounded corners.
  *
- * 2. claudeMessageContainer: '.font-claude-message'
- *    The message container div with specific font styling, containing both thinking process and Claude's response.
- *    Has specific padding and leading styles.
- *
- * 3. thinkingProcessBlock: '.grid.grid-cols-1 pre'
- *    The <pre> element within a grid container, holds the entire thinking process section including header and content.
+ * 2. thinkingProcessBlock: 'pre, .text-text-300, .code-block__code'
+ *    The <pre> element, holds the entire thinking process section including header and content.
  *    Has rounded corners and specific styling.
  *
- * 4. thinkingProcessBlockHeaderTitle: '.grid.grid-cols-1 pre .absolute'
- *    The absolute-positioned div containing the text "thinking" in the header.
+ * 3. thinkingLabel: '.text-text-300'
+ *    The div containing the text label for the thinking process.
  *    Located at the top of the thinking process block.
  *
- * 5. thinkingProcessBlockHeaderCopyButton: '.grid.grid-cols-1 pre .sticky.pointer-events-none'
- *    The sticky-positioned div containing the copy button with pointer-events-none.
- *    Located in the header area, includes an SVG icon and "Copy" text.
- *
- * 6. thinkingProcessContentContainer: '.code-block__code'
+ * 4. thinkingProcessContentContainer: '.code-block__code'
  *    The div with class "code-block__code" that wraps the thinking process content.
  *    Has specific background color, padding, and code styling properties.
  *
- * 7. thinkingProcessContent: '.code-block__code .language-thinking code'
- *    The innermost <code> element within language-thinking class, containing the actual thinking process text.
+ * 5. thinkingProcessContent: 'code'
+ *    The innermost <code> element, containing the actual thinking process text.
  *    Content is wrapped in <span> elements.
  *
- * 8. Additional content structure:
- *    - thinkingContentSpans: Targets the outer spans that contain blocks of text
- *    - thinkingContentTextSpans: Targets the inner spans with the actual thinking process text
+ * 6. mainContainer: '.relative.flex.flex-col'
+ *    The main container div with specific styling and layout.
+ *
+ * 7. originalCopyBtn: '.pointer-events-none'
+ *    The copy button with pointer-events-none.
+ *    Located in the header area, includes an SVG icon and "Copy" text.
+ *
+ * 8. enhancedContainer: '[data-tc-container-id]'
+ *    The container element with data-tc-container-id attribute.
+ *
+ * 9. processedElement: '[data-tc-processed]'
+ *    The element with data-tc-processed attribute.
  */
 
+/** Selectors for finding and interacting with Claude's thinking blocks */
 export const THINKING_SELECTORS = {
-  // Container elements
+  // Container selectors
   responseContainer: "[data-is-streaming]",
-  claudeMessageContainer: ".font-claude-message",
-  thinkingProcessBlock: ".grid.grid-cols-1 pre",
+  mainContainer: ".relative.flex.flex-col",
 
-  // Header elements
-  thinkingProcessBlockHeaderTitle: ".grid.grid-cols-1 pre .absolute",
-  thinkingProcessBlockHeaderCopyButton:
-    ".grid.grid-cols-1 pre .sticky.pointer-events-none",
+  // Core thinking block selectors
+  thinkingProcessBlock:
+    "pre, .text-text-300, .code-block__code, [class*='text-text-'], [class*='code-block']",
+  thinkingLabel: ".text-text-300, [class*='text-text-']",
+  thinkingProcessContentContainer: ".code-block__code, [class*='code-block']",
+  thinkingProcessContent: "code",
 
-  // Content elements
-  thinkingProcessContentContainer: ".code-block__code",
-  thinkingProcessContent: ".code-block__code .language-thinking code",
+  // UI elements
+  originalCopyBtn: ".pointer-events-none",
 
-  // Specific content structure
-  thinkingContentSpans: ".language-thinking > span", // Outer spans containing text blocks
-  thinkingContentTextSpans: ".language-thinking > span > span", // Inner spans with actual text content
+  // Enhanced elements
+  enhancedContainer: "[data-tc-container-id]",
+  processedElement: "[data-tc-processed]",
 } as const
 
-/** Style properties for the thinking process content */
-export const THINKING_CONTENT_STYLES = {
-  codeStyle: {
-    color: "rgb(171, 178, 191)",
-    textShadow: "rgba(0, 0, 0, 0.3) 0px 1px",
-    fontFamily:
-      '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
-    direction: "ltr",
-    textAlign: "left",
-    whiteSpace: "pre",
-    wordSpacing: "normal",
-    wordBreak: "normal",
-    lineHeight: 1.5,
-    tabSize: 2,
-    hyphens: "none",
-  },
-} as const
+// Helper function to check if element is a thinking block
+export const isThinkingBlock = (
+  element: Element | null
+): element is HTMLDivElement => {
+  if (!element || !(element instanceof HTMLDivElement)) {
+    return false
+  }
+
+  // First check if the element itself is a thinking label or code container
+  if (
+    element.matches(THINKING_SELECTORS.thinkingLabel) ||
+    element.matches(THINKING_SELECTORS.thinkingProcessContentContainer)
+  ) {
+    return true
+  }
+
+  // Then check for child elements
+  const hasThinkingLabel = !!element.querySelector(
+    THINKING_SELECTORS.thinkingLabel
+  )
+  const hasCodeContainer = !!element.querySelector(
+    THINKING_SELECTORS.thinkingProcessContentContainer
+  )
+
+  return hasThinkingLabel || hasCodeContainer
+}

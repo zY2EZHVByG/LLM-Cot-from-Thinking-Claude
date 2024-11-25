@@ -2,10 +2,10 @@ import "@/styles/globals.css"
 
 import { shouldInitialize } from "@/utils/url-utils"
 
-import { thinkingProcessManager } from "./react/thinking-process-manager"
+import { thinkingBlockManager } from "./react/thinking-block-manager"
 
 const initializeExtension = async () => {
-  console.log("[Thinking Claude] Initializing extension...")
+  console.log("[Thinking Claude] Starting extension initialization...")
 
   // Skip initialization for unsupported pages
   if (!shouldInitialize(window.location.href)) {
@@ -15,16 +15,32 @@ const initializeExtension = async () => {
     return
   }
 
-  // Inject minimal CSS for FOUC prevention and original element hiding
+  console.log("[Thinking Claude] Page supported, continuing initialization")
+
+  // Immediately inject initial CSS to prevent FOUC
+  const initialStyle = document.createElement("style")
+  initialStyle.id = "tc-initial-styles"
+  initialStyle.textContent = `
+    /* Initially hide all thinking blocks with transition */
+    pre > div:first-child {
+      opacity: 0;
+      transition: opacity 0.2s ease-in;
+    }
+  `
+  document.head.appendChild(initialStyle)
+
+  // Add a small delay to ensure DOM is fully loaded
+  await new Promise((resolve) => setTimeout(resolve, 100))
+
+  // Inject main CSS for enhanced UI
   const style = document.createElement("style")
   style.textContent = `
-    /* Hide visual elements of original thinking block when our component is loaded */
-    .grid.grid-cols-1 pre > div:first-child:has(+ div[data-thinking-process-root]) {
+    /* Only hide elements that have our enhanced version */
+    pre > div:first-child:has(+ div.thinking-block-container) {
       position: absolute !important;
       opacity: 0 !important;
       pointer-events: none !important;
       z-index: -1 !important;
-      /* Keep the element in DOM but visually hidden */
       clip: rect(0 0 0 0) !important;
       clip-path: inset(50%) !important;
       height: 1px !important;
@@ -33,9 +49,9 @@ const initializeExtension = async () => {
       overflow: hidden !important;
     }
 
-    /* Hide unenhanced elements to prevent FOUC */
-    .grid.grid-cols-1 pre .absolute:not([data-extension-loaded="true"]),
-    .code-block__code:not([data-extension-loaded="true"]) {
+    /* Only hide elements after we've processed them */
+    pre .text-text-300[data-tc-processed="true"],
+    .code-block__code[data-tc-processed="true"] {
       visibility: hidden !important;
       height: 0 !important;
       overflow: hidden !important;
@@ -48,26 +64,54 @@ const initializeExtension = async () => {
     }
 
     /* Ensure code block has proper styling */
-    .grid.grid-cols-1 pre {
-      margin: 0 !important;
-      padding: 0 !important;
+    pre {
       background: none !important;
     }
   `
   document.head.appendChild(style)
+  console.log("[Thinking Claude] Injected CSS styles")
 
-  // Start observing thinking process blocks
-  thinkingProcessManager.startObserving()
+  // Initialize block manager
+  console.log("[Thinking Claude] Starting block manager initialization...")
+  thinkingBlockManager.initialize()
+
+  // Remove initial styles after successful initialization
+  setTimeout(() => {
+    const initialStyles = document.getElementById("tc-initial-styles")
+    if (initialStyles) {
+      // Fade blocks back in if our enhanced UI failed to mount
+      initialStyles.textContent = `
+        pre > div:first-child:not(:has(+ div.thinking-block-container)) {
+          opacity: 1;
+          transition: opacity 0.2s ease-out;
+        }
+      `
+      // Remove initial styles after transition
+      setTimeout(() => initialStyles.remove(), 250)
+    }
+  }, 500)
+
+  // Add cleanup on unload
+  window.addEventListener("unload", () => {
+    thinkingBlockManager.cleanup()
+    document.getElementById("tc-initial-styles")?.remove()
+  })
 }
 
 // Initialize when DOM is ready
 if (document.readyState === "loading") {
+  console.log(
+    "[Thinking Claude] Document loading, waiting for DOMContentLoaded"
+  )
   document.addEventListener("DOMContentLoaded", initializeExtension)
 } else {
+  console.log(
+    "[Thinking Claude] Document already loaded, initializing immediately"
+  )
   initializeExtension()
 }
 
-// Cleanup when extension is disabled or removed
+// Cleanup on unload
 window.addEventListener("unload", () => {
-  thinkingProcessManager.stopObserving()
+  console.log("[Thinking Claude] Extension unloading, starting cleanup...")
 })
