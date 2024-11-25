@@ -2,8 +2,8 @@
 
 ## 2024-11-25
 
-- Update v5 to latest 20241125 version.
-- Because of the massive length of the instructions, I will rename it to v5-extensive. A new insturtcion v5 will be the v5-extensive without any examples. The previous v5-Lite will be kept as it is.
+- Update v5-20241124 to latest v5.1-20241125 version.
+- Because of the massive length of the instructions, I will rename it to v5.1-extensive. A new insturtcion v5.1 will be the v5.1-extensive without any examples. The previous v5-Lite will be kept as it is.
 
 ## 2024-11-24
 

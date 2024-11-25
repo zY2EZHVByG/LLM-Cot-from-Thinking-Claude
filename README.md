@@ -28,7 +28,9 @@ thinking-claude/
 │   └── changelog.md
 ├── model_instructions/
 │   ├── changelog.md
-│   ├── v5-Exp-20241123.md
+│   ├── v5.1-extensive-20241125.md
+│   ├── v5.1-20241125.md
+│   ├── v5-lite-20241124.md
 │   ├── v4-20241118.md
 │   ├── v4-lite-20241118.md
 │   └── v3.5-20241113.md
