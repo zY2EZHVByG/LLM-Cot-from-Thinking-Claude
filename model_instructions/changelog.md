@@ -1,5 +1,10 @@
 # Changelog
 
+## 2024-11-25
+
+- Update v5 to latest 20241125 version!
+    - Enhence Claude's ability to better use the avaliable tools.
+
 ## 2024-11-24
 
 - Update v5 to latest 20241124 version!
