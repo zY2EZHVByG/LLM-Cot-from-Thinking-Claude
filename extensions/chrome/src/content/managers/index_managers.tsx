@@ -1,4 +1,4 @@
-import { ThinkingBlockManager } from "./managers/thinking-block-manager"
+import { ThinkingBlockManager } from "./thinking-block-manager"
 
 /**
  * Check if current URL matches Claude chat pattern

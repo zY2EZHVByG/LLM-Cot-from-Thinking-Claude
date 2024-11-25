@@ -1,50 +1,88 @@
+/**Know Issue for now:
+ * Our own Tailwind CSS is not being bundled into the build.
+ * TODO: Figure out why and fix this later.
+ */
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
-  content: ['./src/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}', './src/content/**/*.{ts,tsx}'],
+  prefix: "tc-",
+  important: true,
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/content/**/*.{ts,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        border: "hsl(var(--tc-border))",
+        input: "hsl(var(--tc-input))",
+        ring: "hsl(var(--tc-ring))",
+        background: "hsl(var(--tc-background))",
+        foreground: "hsl(var(--tc-foreground))",
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: "hsl(var(--tc-primary))",
+          foreground: "hsl(var(--tc-primary-foreground))",
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
+          DEFAULT: "hsl(var(--tc-secondary))",
+          foreground: "hsl(var(--tc-secondary-foreground))",
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: "hsl(var(--tc-destructive))",
+          foreground: "hsl(var(--tc-destructive-foreground))",
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          DEFAULT: "hsl(var(--tc-muted))",
+          foreground: "hsl(var(--tc-muted-foreground))",
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          DEFAULT: "hsl(var(--tc-accent))",
+          foreground: "hsl(var(--tc-accent-foreground))",
         },
         popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          DEFAULT: "hsl(var(--tc-popover))",
+          foreground: "hsl(var(--tc-popover-foreground))",
         },
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: "hsl(var(--tc-card))",
+          foreground: "hsl(var(--tc-card-foreground))",
         },
       },
-      borderRadius: {
-        lg: `var(--radius)`,
-        md: `calc(var(--radius) - 2px)`,
-        sm: 'calc(var(--radius) - 4px)',
+      //   we can inherit the original border radius form claude here
+      //   borderRadius: {
+      //     lg: "`var(--radius)`",
+      //     md: "`calc(var(--radius) - 2px)`",
+      //     sm: "calc(var(--radius) - 4px)",
+      //   },
+      keyframes: {
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
+        // shimmer: {
+        //   "0%": { backgroundPosition: "200% 50%" },
+        //   "100%": { backgroundPosition: "-200% 50%" },
+        // },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        // shimmer: "shimmer 3s linear infinite",
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
-};
+  plugins: [require("tailwindcss-animate")],
+}

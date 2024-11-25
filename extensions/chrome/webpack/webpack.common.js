@@ -10,7 +10,7 @@ export default {
   entry: {
     // popup: path.resolve(__dirname, '..', 'src', 'popup', 'index.tsx'), //popup is not being developed yet
     // background: path.resolve(__dirname, '..', 'src', 'background', 'index.ts'), //background is not being developed yet
-    content: path.resolve(__dirname, "..", "src", "content", "index.tsx"),
+    content: path.resolve(__dirname, "..", "src", "content", "index.ts"),
   },
   module: {
     rules: [
