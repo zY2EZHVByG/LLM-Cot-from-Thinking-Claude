@@ -2,147 +2,113 @@ import "@/styles/globals.css"
 
 import { shouldInitialize } from "@/utils/url-utils"
 
-import { thinkingBlockManager } from "./thinking-block"
+function addCodeBlockToggle() {
+  console.log("[TC] Setting up code block toggle")
 
-// Track initialization state
-let isInitialized = false
+  let timeout: NodeJS.Timeout
+  const observer = new MutationObserver(() => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      const headers = document.querySelectorAll(
+        ".text-text-300.absolute.pl-3.pt-2\\.5.text-xs:not(:empty), div[data-is-streaming='true'] .text-text-300.absolute.pl-3.pt-2\\.5.text-xs:not(:empty), .pointer-events-none.sticky"
+      )
+      console.log("[TC] Processing headers after mutations:", headers.length)
 
-const initializeExtension = async () => {
-  // Prevent multiple initializations
-  if (isInitialized) {
-    console.log("[Thinking Claude] Already initialized, skipping...")
-    return
-  }
+      headers.forEach((header) => {
+        if (header.hasAttribute("data-tc-processed")) return
+        header.setAttribute("data-tc-processed", "true")
 
-  console.log("[Thinking Claude] Starting extension initialization...")
+        const codeBlock = header
+          .closest("pre")
+          ?.querySelector(".code-block__code")
+        if (!codeBlock) {
+          console.log("[TC] No code block found for header")
+          return
+        }
 
-  // Skip initialization for unsupported pages
-  if (!shouldInitialize(window.location.href)) {
-    console.log(
-      "[Thinking Claude] Skipping initialization for unsupported page"
-    )
-    return
-  }
+        // Make the element clickable
+        ;(header as HTMLElement).style.cssText =
+          "cursor: pointer; pointer-events: auto !important"
 
-  console.log("[Thinking Claude] Page supported, continuing initialization")
+        const clickHandler = () => {
+          console.log("[TC] Element clicked!")
+          codeBlock.classList.toggle("collapsed")
+          console.log(
+            "[TC] Code block collapsed state:",
+            codeBlock.classList.contains("collapsed")
+          )
+        }
 
-  // Initialize extension
-  const init = async () => {
-    console.log("[Content] Initializing content script")
+        // Add collapsed class by default
+        // codeBlock.classList.add("collapsed")
 
-    // // Immediately inject initial CSS to prevent FOUC
-    // const initialStyle = document.createElement("style")
-    // initialStyle.id = "tc-initial-styles"
-    // initialStyle.textContent = `
-    //   /* Initially hide all thinking blocks with transition */
-    //   pre > div:first-child {
-    //     opacity: 0 !important;
-    //   }
-    // `
-    // document.head.appendChild(initialStyle)
-    console.log("[Content] Added initial styles")
+        // If this is the copy button container
+        if (header.classList.contains("pointer-events-none")) {
+          const buttonContainer = header.querySelector(
+            ".from-bg-300\\/90"
+          ) as HTMLElement
+          const copyButton = header.querySelector("button")
 
-    // Add a small delay to ensure DOM is fully loaded
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    console.log("[Content] DOM load delay completed")
+          if (buttonContainer && copyButton) {
+            buttonContainer.style.cssText =
+              "pointer-events: auto; user-select: none"
+            header.addEventListener("click", clickHandler)
 
-    // Inject main CSS for enhanced UI
-    // const style = document.createElement("style")
-    // style.textContent = `
-    //   /* Only hide elements that have our enhanced version */
-    //   pre > div:first-child:has(+ div.tc-thinking-block-container) {
-    //     position: absolute !important;
-    //     opacity: 0 !important;
-    //     pointer-events: none !important;
-    //     z-index: -1 !important;
-    //     clip: rect(0 0 0 0) !important;
-    //     clip-path: inset(50%) !important;
-    //     height: 1px !important;
-    //     width: 1px !important;
-    //     margin: -1px !important;
-    //     overflow: hidden !important;
-    //   }
+            copyButton.addEventListener(
+              "click",
+              async (e) => {
+                e.stopPropagation()
+                console.log("[TC] Copy button clicked")
 
-    //   /* Only hide elements after we've processed them */
-    //   pre .text-text-300[data-tc-processed="true"],
-    //   .code-block__code[data-tc-processed="true"] {
-    //     visibility: hidden !important;
-    //     height: 0 !important;
-    //     overflow: hidden !important;
-    //   }
+                const codeElement = codeBlock.querySelector("code")
+                if (!codeElement) return
 
-    //   /* Shimmer animation for streaming state */
-    //   @keyframes gradientWave {
-    //     0% { background-position: 200% 50%; }
-    //     100% { background-position: -200% 50%; }
-    //   }
+                try {
+                  await navigator.clipboard.writeText(
+                    codeElement.textContent || ""
+                  )
 
-    //   /* Ensure code block has proper styling */
-    //   pre {
-    //     background: none !important;
-    //   }
-    // `
-    // document.head.appendChild(style)
-    console.log("[Thinking Claude] Injected CSS styles")
+                  // Update button text and SVG
+                  const textSpan = copyButton.querySelector("span")
+                  const svg = copyButton.querySelector("svg")
+                  if (textSpan && svg) {
+                    const originalText = textSpan.textContent
+                    const originalSvgPath = svg.innerHTML
 
-    // Add immediate style to hide elements
-    // const hideStyle = document.createElement("style")
-    // hideStyle.textContent = `
-    //   .code-block__code[data-tc-processed],
-    //   .text-text-300[data-tc-processed],
-    //   .pointer-events-none[data-tc-processed] {
-    //     display: none !important;
-    //   }
-    // `
-    // document.head.appendChild(hideStyle)
+                    textSpan.textContent = "Copied"
+                    svg.innerHTML =
+                      '<path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>'
 
-    // Initialize block manager
-    console.log("[Thinking Claude] Starting block manager initialization...")
-    thinkingBlockManager.initialize()
-
-    // Remove initial styles after successful initialization
-    setTimeout(() => {
-      const initialStyles = document.getElementById("tc-initial-styles")
-      if (initialStyles) {
-        // Fade blocks back in if our enhanced UI failed to mount
-        initialStyles.textContent = `
-          pre > div:first-child:not(:has(+ div.tc-thinking-block-container)) {
-            opacity: 1;
-            transition: opacity 0.2s ease-out;
+                    setTimeout(() => {
+                      textSpan.textContent = originalText
+                      svg.innerHTML = originalSvgPath
+                    }, 2000)
+                  }
+                } catch (err) {
+                  console.error("[TC] Failed to copy:", err)
+                }
+              },
+              true
+            )
           }
-        `
-        // Remove initial styles after transition
-        setTimeout(() => initialStyles.remove(), 250)
-      }
-    }, 500)
+        } else {
+          header.addEventListener("click", clickHandler)
+        }
+      })
+    }, 100)
+  })
 
-    // Add cleanup on unload
-    window.addEventListener("unload", () => {
-      thinkingBlockManager.cleanup()
-      document.getElementById("tc-initial-styles")?.remove()
-    })
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  })
+}
+
+// Only initialize on appropriate pages
+if (shouldInitialize(window.location.href)) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", addCodeBlockToggle)
+  } else {
+    addCodeBlockToggle()
   }
-
-  await init()
-  isInitialized = true
 }
-
-// Initialize when DOM is ready
-if (document.readyState === "loading") {
-  console.log(
-    "[Thinking Claude] Document loading, waiting for DOMContentLoaded"
-  )
-  document.addEventListener("DOMContentLoaded", initializeExtension)
-} else {
-  console.log(
-    "[Thinking Claude] Document already loaded, initializing immediately"
-  )
-  initializeExtension()
-}
-
-// Cleanup on unload
-window.addEventListener("unload", () => {
-  console.log("[Thinking Claude] Extension unloading, starting cleanup...")
-  thinkingBlockManager.cleanup()
-  document.getElementById("tc-initial-styles")?.remove()
-})
