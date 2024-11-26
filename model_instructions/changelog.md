@@ -1,5 +1,21 @@
 # Changelog
 
+## 2024-11-25
+
+- Update v5-20241124 to latest v5.1-20241125 version.
+- Because of the massive length of the instructions, I will rename it to v5.1-extensive. A new insturtcion v5.1 will be the v5.1-extensive without any examples. The previous v5-Lite will be kept as it is.
+
+## 2024-11-24
+
+- Update v5 to latest 20241124 version!
+    - Modify some examples;
+    - Change some wording for better model's understanding.
+
+- Update the previous v4-Lite-20241118 version to 20241124 version with impassive language guidelines.
+
+- Update the current v4-Lite version into a new v5-Lite version of Thinking Claude instructions.
+    - Restructure the instructions using XML tags.
+
 ## 2024-11-23
 
 - New version of Thinking Claude instructions v5 (Experimental)!
