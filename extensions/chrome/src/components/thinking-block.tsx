@@ -14,19 +14,19 @@ interface ThinkingBlockProps {
   isStreaming: boolean
 }
 
-interface CodeViewerProps {
-  className?: string
-  originalElement: HTMLElement
-}
+// interface CodeViewerProps {
+//   className?: string
+//   originalElement: HTMLElement
+// }
 
-const CodeViewer = ({ className, originalElement }: CodeViewerProps) => {
-  return (
-    <code
-      className={cn(originalElement.className, className)}
-      dangerouslySetInnerHTML={{ __html: originalElement.innerHTML }}
-    />
-  )
-}
+// const CodeViewer = ({ className, originalElement }: CodeViewerProps) => {
+//   return (
+//     <code
+//       className={cn(originalElement.className, className)}
+//       dangerouslySetInnerHTML={{ __html: originalElement.innerHTML }}
+//     />
+//   )
+// }
 
 export const ThinkingBlock: React.FC<ThinkingBlockProps> = ({
   containerRef,
@@ -35,25 +35,47 @@ export const ThinkingBlock: React.FC<ThinkingBlockProps> = ({
   const [isOpen, setIsOpen] = useState(true)
   const [codeElement, setCodeElement] = useState<HTMLElement | null>(null)
   const [isCopied, setIsCopied] = useState(false)
+  const [content, setContent] = useState("")
 
   useEffect(() => {
-    const element = containerRef.querySelector(
-      ".code-block__code > code"
-    ) as HTMLElement
-    if (!element) return
-    setCodeElement(element)
+    const updateContent = () => {
+      const element = containerRef.querySelector(
+        ".code-block__code > code"
+      ) as HTMLElement
+      if (!element) return
+      setCodeElement(element)
+      setContent(element.textContent || "")
+    }
+
+    // Initial content update
+    updateContent()
+
+    // Set up observer for content changes if streaming
+    if (isStreaming) {
+      const observer = new MutationObserver(() => {
+        updateContent()
+      })
+
+      observer.observe(containerRef, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      })
+
+      return () => observer.disconnect()
+    }
   }, [containerRef, isStreaming])
 
   const handleCopy = useCallback(async () => {
     try {
-      if (!codeElement) return
-      await navigator.clipboard.writeText(codeElement.textContent || "")
+      if (!content) return
+      await navigator.clipboard.writeText(content)
       setIsCopied(true)
       setTimeout(() => setIsCopied(false), 2000)
-    } catch (error) {
-      console.error("[Thinking Claude] Failed to copy:", error)
+    } catch (err) {
+      console.error("Failed to copy text:", err)
     }
-  }, [codeElement])
+  }, [content])
 
   if (!codeElement) return null
 
@@ -85,7 +107,7 @@ export const ThinkingBlock: React.FC<ThinkingBlockProps> = ({
           size="sm"
           variant="ghost"
           onClick={handleCopy}
-          disabled={!codeElement}
+          disabled={!content}
           className="transition-all duration-200 ease-out text-text-500 text-xs hover:bg-bg-200 hover:text-text-300 p-1 py-0.5 h-6"
         >
           {isCopied ? (
@@ -103,18 +125,27 @@ export const ThinkingBlock: React.FC<ThinkingBlockProps> = ({
       <CollapsibleContent className="tc-collapsible-content overflow-x-hidden overflow-y-auto max-h-[40vh]">
         <div
           className={cn(
-            "h-fit text-sm text-text-300 whitespace-pre-wrap break-words font-mono",
+            "h-fit text-sm text-text-300",
             isStreaming && "tc-animate-shimmer"
           )}
-          style={{
-            fontFamily:
-              '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
-            lineHeight: 1.5,
-            tabSize: 2,
-            hyphens: "none",
-          }}
         >
-          {codeElement && <CodeViewer originalElement={codeElement} />}
+          {content && (
+            <div
+              className="text-text-300 whitespace-pre-wrap break-words font-mono"
+              style={{
+                fontFamily:
+                  '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
+                lineHeight: 2,
+                tabSize: 2,
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
+                hyphens: "none",
+              }}
+            >
+              {content}
+            </div>
+          )}
+          {/* {codeElement && <CodeViewer originalElement={codeElement} />} */}
         </div>
       </CollapsibleContent>
     </Collapsible>

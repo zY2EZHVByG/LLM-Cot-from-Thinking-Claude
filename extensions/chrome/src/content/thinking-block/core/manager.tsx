@@ -8,7 +8,6 @@ import {
   createThinkingBlockContainer,
   generateBlockId,
   getThinkingBlockElements,
-  hideElement,
   isStreaming,
   isThinkingBlock,
 } from "../utils/dom"
@@ -21,36 +20,37 @@ class ThinkingBlockManager {
   private roots: ThinkingBlockRoots = {}
 
   private processBlock(block: Element) {
+    // Skip if the block is already being processed
+    if (block.hasAttribute("data-tc-processing")) {
+      return
+    }
+
     // Check if block needs reprocessing
     const blockId = block.getAttribute("data-tc-block-id")
     const existingContainer = blockId
       ? document.querySelector(`[data-tc-container-id="${blockId}"]`)
       : null
 
-    // If block was previously processed but container is missing, clean up
-    if (blockId && !existingContainer) {
-      this.roots[blockId]?.unmount()
-      delete this.roots[blockId]
-      this.processedBlocks.delete(block)
-      block.querySelectorAll("[data-tc-processed]").forEach((el) => {
-        el.removeAttribute("data-tc-processed")
-        ;(el as HTMLElement).style.display = ""
-      })
+    // Skip if already processed and container exists
+    if (this.processedBlocks.has(block) && existingContainer) {
+      return
     }
 
-    // Skip if already processed and container exists
-    if (this.processedBlocks.has(block) && existingContainer) return
-
-    // Validate thinking block
-    if (!isThinkingBlock(block)) return
-
-    // Get DOM elements
-    const { codeContainer, codeContent, mainContainer } =
-      getThinkingBlockElements(block)
-
-    if (!codeContainer || !codeContent || !mainContainer) return
+    // Mark block as being processed
+    block.setAttribute("data-tc-processing", "true")
 
     try {
+      // Validate thinking block
+      if (!isThinkingBlock(block)) {
+        return
+      }
+
+      // Get DOM elements
+      const { codeContainer, codeContent, mainContainer } =
+        getThinkingBlockElements(block)
+
+      if (!codeContainer || !codeContent || !mainContainer) return
+
       // Generate or use existing block ID
       const newBlockId = blockId || generateBlockId()
 
@@ -58,34 +58,35 @@ class ThinkingBlockManager {
         block.setAttribute("data-tc-block-id", newBlockId)
       }
 
-      // Create and setup container
-      const container = createThinkingBlockContainer(newBlockId)
+      // Only create new container and root if they don't exist
+      if (!existingContainer) {
+        // Create and setup container
+        const container = createThinkingBlockContainer(newBlockId)
 
-      // Create React root and render component
-      const root = createRoot(container)
-      // set root in map
-      this.roots[newBlockId] = root
+        // Insert our container at the start of the flex container, before the thinking header
+        const thinkingHeader = block.querySelector(
+          CLAUDE_ORIGINAL_SELECTORS.claudeThinkingLabel
+        )
+        thinkingHeader?.parentElement?.insertBefore(container, thinkingHeader)
 
-      root.render(
-        <ThinkingBlock
-          containerRef={block as HTMLElement}
-          isStreaming={isStreaming(block)}
-        />
-      )
+        // Create React root and render component
+        const root = createRoot(container)
+        this.roots[newBlockId] = root
 
-      // Insert React component and hide original elements
-      mainContainer.insertBefore(container, codeContainer.parentElement)
-      this.processedBlocks.add(block)
+        // Mark as processed
+        this.processedBlocks.add(block)
 
-      // Hide original elements
-      const elementsToHide = [
-        block.querySelector(CLAUDE_ORIGINAL_SELECTORS.claudeThinkingLabel),
-        block.querySelector(CLAUDE_ORIGINAL_SELECTORS.originalCopyBtn),
-        codeContainer,
-      ]
-      elementsToHide.forEach(hideElement)
-    } catch (error) {
-      console.error("Error mounting thinking block:", error)
+        // Render component
+        root.render(
+          <ThinkingBlock
+            containerRef={block as HTMLElement}
+            isStreaming={isStreaming(block)}
+          />
+        )
+      }
+    } finally {
+      // Always remove processing marker
+      block.removeAttribute("data-tc-processing")
     }
   }
 

@@ -1,3 +1,15 @@
+/** Original HTML
+<pre>
+  <div class="relative flex flex-col rounded-lg">
+    <div class="text-text-300...">thinking</div>
+    <div class="pointer-events-none...">copy button</div>
+    <div>
+      <div class="code-block__code...">content</div>
+    </div>
+  </div>
+</pre>
+ */
+
 /** Selectors for finding and interacting with Claude's thinking blocks */
 export const TC_SELECTORS = {
   // Enhanced elements

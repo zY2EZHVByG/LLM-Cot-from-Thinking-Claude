@@ -30,12 +30,6 @@ export const isStreaming = (block: Element): boolean =>
     .closest(CLAUDE_ORIGINAL_SELECTORS.claudeResponseContainer)
     ?.getAttribute("data-is-streaming") === "true"
 
-export const hideElement = (element: Element | null) => {
-  if (!element) return
-  ;(element as HTMLElement).style.display = "none"
-  element.setAttribute("data-tc-processed", "true")
-}
-
 export const createThinkingBlockContainer = (
   blockId: string
 ): HTMLDivElement => {
