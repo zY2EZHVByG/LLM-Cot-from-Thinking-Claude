@@ -2,7 +2,7 @@ import "@/styles/globals.css"
 
 import { shouldInitialize } from "@/utils/url-utils"
 
-import { thinkingBlockManager } from "./react/thinking-block-manager"
+import { thinkingBlockManager } from "./thinking-block"
 
 const initializeExtension = async () => {
   console.log("[Thinking Claude] Starting extension initialization...")
@@ -36,7 +36,7 @@ const initializeExtension = async () => {
   const style = document.createElement("style")
   style.textContent = `
     /* Only hide elements that have our enhanced version */
-    pre > div:first-child:has(+ div.thinking-block-container) {
+    pre > div:first-child:has(+ div.tc-thinking-block-container) {
       position: absolute !important;
       opacity: 0 !important;
       pointer-events: none !important;
@@ -81,7 +81,7 @@ const initializeExtension = async () => {
     if (initialStyles) {
       // Fade blocks back in if our enhanced UI failed to mount
       initialStyles.textContent = `
-        pre > div:first-child:not(:has(+ div.thinking-block-container)) {
+        pre > div:first-child:not(:has(+ div.tc-thinking-block-container)) {
           opacity: 1;
           transition: opacity 0.2s ease-out;
         }
