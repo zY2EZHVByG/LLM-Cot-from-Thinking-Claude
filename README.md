@@ -79,7 +79,7 @@ The browser extension makes Claude's thinking process easier to read and use! It
    - Unzip the file
    - Open Chrome and go to `chrome://extensions/`
    - Turn on "Developer mode" (top right corner)
-   - Click "Load unpacked" and select the unzipped folder
+   - Click "Load unpacked" and select the unzipped folder `dist`
 
 👉 Want more details? Check out our [Extension Guide](extensions/chrome/README.md) for:
 

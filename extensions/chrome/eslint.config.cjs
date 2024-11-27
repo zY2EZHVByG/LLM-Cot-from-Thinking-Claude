@@ -33,6 +33,9 @@ module.exports = [
         setInterval: "readonly",
         Node: "readonly",
         HTMLButtonElement: "readonly",
+        MutationRecord: "readonly",
+        MouseEvent: "readonly",
+        SVGSVGElement: "readonly",
       },
     },
     plugins: {
@@ -58,6 +61,8 @@ module.exports = [
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "no-inline-styles": "off",
+      "no-undef": "off",
+      "react/prop-types": "off",
     },
     settings: {
       react: {

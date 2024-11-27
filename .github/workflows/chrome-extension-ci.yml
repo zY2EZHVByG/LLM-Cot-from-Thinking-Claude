@@ -75,7 +75,7 @@ jobs:
             # Don't increment major versions (x.0.0)
             echo "version=$current_version" >> $GITHUB_OUTPUT
             echo "version_changed=false" >> $GITHUB_OUTPUT
-          elif git ls-remote --tags origin refs/tags/v$current_version >/dev/null; then
+          elif git ls-remote --tags origin | grep -q "refs/tags/v$current_version"; then
             # If tag exists and it's not a major version, increment patch
             IFS='.' read -r major minor patch <<< "$current_version"
             new_version="$major.$minor.$((patch + 1))"
