@@ -223,6 +223,23 @@ We use several tools to maintain code quality:
 - **ESLint**: Finds and fixes JavaScript problems
 - **Prettier**: Formats your code consistently
 
+### Version Control & Releases
+
+The project uses automated version bumping through CI:
+
+- **Automatic Version Bumping**: When code is merged to main, the CI will:
+
+  - Auto-increment the patch version (e.g., 1.0.0 -> 1.0.1)
+  - Create a new release with the bumped version
+  - Skip version bump for major versions (x.0.0)
+
+- **Manual Version Control**:
+  - Developers can manually set both versions in `package.json` and `manifest.json`
+  - Major version changes (x.0.0) must be set manually
+  - Manual versions will be respected by CI
+
+> **Note**: If you need to manually set a version, update both `package.json` and `manifest.json` before merging to main.
+
 ### Continuous Integration
 
 Our GitHub Actions setup automatically:

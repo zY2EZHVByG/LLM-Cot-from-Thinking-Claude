@@ -1,5 +1,27 @@
 ## Changelog of the extensions
 
+### feat/fix/ref: - 11/27/2024 - @lumpinif
+
+#### Performance & Code Quality
+
+- Extremely streamline code structure and implementation approach
+- Much optimized performance
+- Streamline and organize code for thinking-block implementation
+
+#### Bug Fixes
+
+- Fix flash of unstyled content (FOUC)
+- Fix stutter when submitting new replies
+- Fix FOUC and streaming issues for thinking-block implementation
+
+#### UI Improvements
+
+- Update chevron icon with transition effect
+
+#### Architecture
+
+- Implement ultimate approach with simplest and most effective implementation after experimentation
+
 ### fix: - 11/17/2024 - @lumpinif
 
 #### Observer Management and Memory Leak Prevention

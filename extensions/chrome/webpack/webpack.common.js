@@ -10,7 +10,7 @@ export default {
   entry: {
     // popup: path.resolve(__dirname, '..', 'src', 'popup', 'index.tsx'), //popup is not being developed yet
     // background: path.resolve(__dirname, '..', 'src', 'background', 'index.ts'), //background is not being developed yet
-    content: path.resolve(__dirname, "..", "src", "content", "index.tsx"),
+    content: path.resolve(__dirname, "..", "src", "content", "index.ts"),
   },
   module: {
     rules: [
@@ -29,7 +29,23 @@ export default {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+            },
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                config: path.resolve(__dirname, "..", "postcss.config.cjs"),
+              },
+            },
+          },
+        ],
       },
     ],
   },
