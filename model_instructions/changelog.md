@@ -1,5 +1,9 @@
 # Changelog
 
+## 2024-11-27
+
+- Some small updates on v5.1-extensive version.
+
 ## 2024-11-25
 
 - Update v5-20241124 to latest v5.1-20241125 version.
