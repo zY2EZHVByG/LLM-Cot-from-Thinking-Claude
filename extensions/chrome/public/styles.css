@@ -1,5 +1,5 @@
 /* Overwrite original claude thinking block content styles */
-.code-block__code {
+div[data-is-streaming] pre:first-child .code-block__code {
   background: none !important;
   white-space: pre-wrap !important;
   word-wrap: break-word !important;
@@ -20,7 +20,7 @@
 /* collapsed states */
 
 /* Collapsed state */
-.code-block__code.collapsed {
+div[data-is-streaming] pre:first-child .code-block__code.collapsed {
   height: 0 !important;
   padding: 0 !important;
   visibility: hidden !important;
@@ -28,7 +28,10 @@
 }
 
 /* Collapsed state */
-[data-thinking-block-state="collapsed"] .code-block__code {
+[data-thinking-block-state="collapsed"]
+  div[data-is-streaming]
+  pre:first-child
+  .code-block__code {
   height: 0 !important;
   padding: 0 !important;
   visibility: hidden !important;
@@ -36,14 +39,14 @@
 }
 
 /* Expanded state */
-/* [data-thinking-block-state="expanded"] .code-block__code {
+/* [data-thinking-block-state="expanded"] div[data-is-streaming] pre:first-child .code-block__code {
   height: 50vh !important;
   padding: 1em !important;
   visibility: visible !important;
   opacity: 1 !important;
 } */
 
-code {
+div[data-is-streaming] pre:first-child code {
   background: none !important;
   white-space: pre-wrap !important;
   word-wrap: break-word !important;
@@ -74,13 +77,13 @@ code span:hover {
 /* --------------------------------- */
 
 /* Copy button container */
-div[data-is-streaming] .pointer-events-none.sticky {
+div[data-is-streaming] pre:first-child .pointer-events-none.sticky {
   cursor: pointer !important;
   pointer-events: auto !important;
 }
 
 /* Copy button container */
-div[data-is-streaming] .from-bg-300\\/90 {
+div[data-is-streaming] pre:first-child .from-bg-300\\/90 {
   pointer-events: auto !important;
   user-select: none !important;
 }
@@ -89,7 +92,9 @@ div[data-is-streaming] .from-bg-300\\/90 {
 
 /* Update the header text */
 /* This is the original header text */
-pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty) {
+div[data-is-streaming]
+  pre:first-child
+  .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty) {
   font-size: 0; /* Hide original text */
   pointer-events: auto !important; /* Make sure it's clickable */
   cursor: pointer !important;
@@ -99,8 +104,9 @@ pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty) {
 }
 
 /* Update the text of the header */
-[data-thinking-block-state="collapsed"]
-  pre
+div[data-is-streaming]
+  [data-thinking-block-state="collapsed"]
+  pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
   content: "Open Claude's thinking";
   font-size: 0.875rem; /* Restore font size */
@@ -109,7 +115,9 @@ pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty) {
   transition: color 0.15s ease-in-out;
 }
 
-pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
+div[data-is-streaming]
+  pre:first-child
+  .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
   content: "Claude's thinking";
   font-size: 0.875rem; /* Restore font size */
   cursor: pointer;
@@ -118,8 +126,9 @@ pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
 }
 
 /* Hover state */
+/* This implementation is limited. We can consider to disable this hover state. */
 [data-thinking-block-state="expanded"]
-  pre
+  pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty):hover::after {
   color: hsl(var(--text-100));
   content: "Hide Claude's thinking";
@@ -127,7 +136,7 @@ pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
 
 /* Streaming state styles */
 div[data-is-streaming="true"]
-  pre
+  pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
   content: "Claude is thinking...";
   background: linear-gradient(
@@ -149,7 +158,8 @@ div[data-is-streaming="true"]
 }
 
 /* Chevron-down icon */
-pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
+pre:first-child
+  .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
   content: "";
   width: 15px;
   height: 15px;
@@ -182,7 +192,7 @@ pre .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
 /* Chevron animation */
 
 [data-thinking-block-state="collapsed"]
-  pre
+  pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
   transform: rotate(180deg);
 }
