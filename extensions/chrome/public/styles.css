@@ -104,11 +104,11 @@ div[data-is-streaming]
 }
 
 /* Update the text of the header */
-div[data-is-streaming]
-  [data-thinking-block-state="collapsed"]
+
+div[data-thinking-block-state="collapsed"]
   pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
-  content: "Open Claude's thinking";
+  content: "View Claude's thinking" !important;
   font-size: 0.875rem; /* Restore font size */
   cursor: pointer;
   font-family: var(--font-user-message);
