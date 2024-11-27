@@ -24,14 +24,6 @@
     --tc-destructive-foreground: 210 40% 98%;
     --tc-ring: 215 20.2% 65.1%;
     --tc-radius: 0.5rem;
-    --tc-thinking-gradient: linear-gradient(
-      90deg,
-      hsl(var(--tc-muted)) 0%,
-      hsl(var(--tc-muted-foreground)) 25%,
-      hsl(var(--tc-muted)) 50%,
-      hsl(var(--tc-muted-foreground)) 75%,
-      hsl(var(--tc-muted)) 100%
-    );
   }
 
   .dark {
@@ -54,52 +46,5 @@
     --tc-destructive: 0 63% 31%;
     --tc-destructive-foreground: 210 40% 98%;
     --tc-ring: 216 34% 17%;
-  }
-}
-
-@layer components {
-  .tc-animate-shimmer {
-    background: var(--tc-thinking-gradient);
-    background-size: 200% 100%;
-    animation: tc-shimmer 3s linear infinite;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .tc-collapsible-content[data-state="open"] {
-    animation: collapsible-slide-down 0.25s ease-out;
-  }
-
-  .tc-collapsible-content[data-state="closed"] {
-    animation: collapsible-slide-up 0.2s ease-out;
-  }
-}
-
-@keyframes tc-shimmer {
-  from {
-    background-position: 0% center;
-  }
-  to {
-    background-position: -200% center;
-  }
-}
-
-@keyframes collapsible-slide-down {
-  from {
-    height: 0;
-  }
-  to {
-    height: var(--radix-collapsible-content-height);
-  }
-}
-
-@keyframes collapsible-slide-up {
-  from {
-    height: var(--radix-collapsible-content-height);
-  }
-  to {
-    height: 0;
   }
 }

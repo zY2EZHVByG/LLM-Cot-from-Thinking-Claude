@@ -2,6 +2,7 @@
  * Our own Tailwind CSS is not being bundled into the build.
  * TODO: Figure out why and fix this later.
  */
+const colors = require("tailwindcss/colors")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -11,6 +12,8 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
     "./src/components/**/*.{ts,tsx}",
     "./src/content/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx,html,js,jsx}",
+    "./public/**/*.html",
   ],
   theme: {
     extend: {
@@ -48,6 +51,29 @@ module.exports = {
           DEFAULT: "hsl(var(--tc-card))",
           foreground: "hsl(var(--tc-card-foreground))",
         },
+        // Include Tailwind's default colors
+        slate: colors.slate,
+        gray: colors.gray,
+        zinc: colors.zinc,
+        neutral: colors.neutral,
+        stone: colors.stone,
+        red: colors.red,
+        orange: colors.orange,
+        amber: colors.amber,
+        yellow: colors.yellow,
+        lime: colors.lime,
+        green: colors.green,
+        emerald: colors.emerald,
+        teal: colors.teal,
+        cyan: colors.cyan,
+        sky: colors.sky,
+        blue: colors.blue,
+        indigo: colors.indigo,
+        violet: colors.violet,
+        purple: colors.purple,
+        fuchsia: colors.fuchsia,
+        pink: colors.pink,
+        rose: colors.rose,
       },
       //   we can inherit the original border radius form claude here
       //   borderRadius: {
