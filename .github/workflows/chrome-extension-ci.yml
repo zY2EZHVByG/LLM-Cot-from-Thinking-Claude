@@ -69,39 +69,28 @@ jobs:
       # Only increment patch version for non-major versions
       - name: Check existing tag
         id: check_tag
-        working-directory: ./extensions/chrome
         run: |
           current_version=$(node -p "require('./package.json').version")
-          latest_tag=$(git ls-remote --tags origin 'refs/tags/v*' | sort -V | tail -n1 | sed 's/.*refs\/tags\/v//')
-
-          echo "Current version: $current_version"
-          echo "Latest tag: $latest_tag"  # Add debugging output
-
           if [[ "$current_version" =~ ^[0-9]+\.0\.0$ ]]; then
-            echo "Major version detected: $current_version"
+            # Don't increment major versions (x.0.0)
             echo "version=$current_version" >> $GITHUB_OUTPUT
             echo "version_changed=false" >> $GITHUB_OUTPUT
-          elif [[ -n "$latest_tag" ]]; then
-            if [[ "$(printf '%s\n' "$latest_tag" "$current_version" | sort -V | head -n1)" == "$latest_tag" ]]; then
-              echo "Current version is newer than latest tag"
-              echo "version=$current_version" >> $GITHUB_OUTPUT
-              echo "version_changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "Incrementing patch version"
-              IFS='.' read -r major minor patch <<< "$current_version"
-              new_version="$major.$minor.$((patch + 1))"
-              echo "version=$new_version" >> $GITHUB_OUTPUT
-              echo "version_changed=true" >> $GITHUB_OUTPUT
-              sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" package.json
-              sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" public/manifest.json
-              git config --global user.email "github-actions[bot]@users.noreply.github.com"
-              git config --global user.name "github-actions[bot]"
-              git add package.json public/manifest.json
-              git commit -m "chore: bump version to $new_version [skip ci]"
-              git push
-            fi
+          elif git ls-remote --tags origin refs/tags/v$current_version >/dev/null; then
+            # If tag exists and it's not a major version, increment patch
+            IFS='.' read -r major minor patch <<< "$current_version"
+            new_version="$major.$minor.$((patch + 1))"
+            echo "version=$new_version" >> $GITHUB_OUTPUT
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            # Update package.json with new version
+            sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" package.json
+            # Update manifest.json with new version
+            sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" public/manifest.json
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions[bot]"
+            git add package.json public/manifest.json
+            git commit -m "chore: bump version to $new_version [skip ci]"
+            git push
           else
-            echo "No existing tags found"
             echo "version=$current_version" >> $GITHUB_OUTPUT
             echo "version_changed=false" >> $GITHUB_OUTPUT
           fi
