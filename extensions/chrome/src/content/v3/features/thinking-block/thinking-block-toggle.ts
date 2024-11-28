@@ -5,7 +5,7 @@ import { setupControls } from "./setup-controls"
 
 export function addThinkingBlockToggle() {
   mutationObserver.initialize()
-  mutationObserver.subscribe(processThinkingBlocks)
+  return mutationObserver.subscribe(processThinkingBlocks)
 }
 
 function processThinkingBlocks() {
