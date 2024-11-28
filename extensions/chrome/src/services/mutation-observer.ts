@@ -1,10 +1,29 @@
 type ObserverCallback = () => void
 
-class MutationObserverService {
+export interface MutationObserverOptions {
+  childList?: boolean
+  subtree?: boolean
+  attributes?: boolean
+  characterData?: boolean
+  debounceTime?: number
+}
+
+export class MutationObserverService {
   private observer: MutationObserver | null = null
   private callbacks: Set<ObserverCallback> = new Set()
   private timeouts: Map<ObserverCallback, NodeJS.Timeout> = new Map()
   private isProcessing = false
+  private options: MutationObserverOptions
+
+  constructor(
+    options: MutationObserverOptions = {
+      childList: true,
+      subtree: true,
+      debounceTime: 200,
+    }
+  ) {
+    this.options = options
+  }
 
   initialize() {
     if (this.observer) return
@@ -22,16 +41,33 @@ class MutationObserverService {
         const timeout = setTimeout(() => {
           callback()
           this.isProcessing = false
-        }, 200) // Slightly increased debounce time
+        }, this.options.debounceTime)
 
         this.timeouts.set(callback, timeout)
       })
     })
 
     this.observer.observe(document.body, {
-      childList: true,
-      subtree: true,
+      childList: this.options.childList,
+      subtree: this.options.subtree,
+      attributes: this.options.attributes,
+      characterData: this.options.characterData,
     })
+  }
+
+  /* service-level cleanup but we don't usually need this */
+  cleanup() {
+    // 1. Disconnect the MutationObserver
+    this.observer?.disconnect()
+    // 2. Clear the observer reference
+    this.observer = null
+    // 3. Clear all pending timeouts
+    this.timeouts.forEach((timeout) => clearTimeout(timeout))
+    this.timeouts.clear()
+    // 4. Clear all callbacks
+    this.callbacks.clear()
+    // 5. Reset processing flag
+    this.isProcessing = false
   }
 
   subscribe(callback: ObserverCallback) {
@@ -48,5 +84,3 @@ class MutationObserverService {
     }
   }
 }
-
-export const mutationObserver = new MutationObserverService()
