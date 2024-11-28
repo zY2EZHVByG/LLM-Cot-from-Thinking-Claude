@@ -1,14 +1,8 @@
 import { THINKING_BLOCK_CONTROLS_SELECTORS } from "@/selectors"
-import { mutationObserver } from "@/services/mutation-observer"
 
 import { setupControls } from "./setup-controls"
 
-export function addThinkingBlockToggle() {
-  mutationObserver.initialize()
-  return mutationObserver.subscribe(processThinkingBlocks)
-}
-
-function processThinkingBlocks() {
+export function processThinkingBlocks() {
   const thinkingBlockControls = document.querySelectorAll(
     THINKING_BLOCK_CONTROLS_SELECTORS
   )
