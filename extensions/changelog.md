@@ -1,5 +1,20 @@
 ## Changelog of the extensions
 
+### feat/fix/ref: - 11/28/2024 - @lumpinif
+
+#### Architecture
+
+- Implement feature management architecture for better extensibility
+  - Add ExtensionManager for high-level orchestration
+  - Create FeatureManager for feature lifecycle
+  - Convert TCThinkingBlock to new architecture
+  - Add configurable MutationObserverService
+  - Remove singleton pattern usage
+- Improve code organization and modularity
+  - Clear separation of concerns
+  - Dependency injection pattern
+  - Standardized feature lifecycle
+
 ### feat/fix/ref: - 11/27/2024 - @lumpinif
 
 #### Performance & Code Quality
