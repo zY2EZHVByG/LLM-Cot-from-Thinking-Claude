@@ -93,25 +93,9 @@ The browser extension makes Claude's thinking process easier to read and use! It
 Once installed, just:
 
 1. Visit [Claude.ai](https://claude.ai)
-2. Start chatting with Claude
-3. That's it! The extension will automatically make Claude's thinking process more readable
-
-## Usage
-
-### Applying the Thinking Protocol
-
-1. Copy the latest version in `model_instructions` folder
-2. Start a new Project in Claude.ai
-3. Paste the instructions to the Custom Instructions section
-4. Claude will now follow the thinking protocol for all subsequent interactions
-
-### Using the Extension
-
-Once installed, the extension automatically:
-
-- Detects Claude's thinking process blocks
-- Adds collapse/expand functionality
-- Provides a copy button for each block
+2. Click on the `Choose style` selector in the bottom of input box -> click on `Create & Edit Styles` -> click on `Create Custom Style` -> click on `Describe style manually` -> click on `Start from scratch` -> click on `Use custom instructions (advanced)` -> paste the content of the desired instruction set from `model_instructions/` folder
+3. Start chatting with Claude
+4. That's it! The extension will automatically make Claude's thinking process more readable
 
 ## Why Use Thinking Claude?
 
