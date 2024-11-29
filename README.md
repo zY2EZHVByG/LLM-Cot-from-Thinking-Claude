@@ -118,4 +118,4 @@ MIT License - feel free to use and modify as needed.
 
 ## Acknowledgments
 
-Special thanks to @lumpinif and Claude for the extension!
+Special thanks to [@lumpinif](https://github.com/lumpinif) and Claude for the extension!
