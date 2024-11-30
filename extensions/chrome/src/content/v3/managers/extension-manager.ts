@@ -14,8 +14,6 @@ export class ExtensionManager {
   constructor() {
     this.mutationObserver = new MutationObserverService()
     this.featureManager = new FeatureManager()
-
-    this.setupNavigationListener()
   }
 
   /**
@@ -44,20 +42,6 @@ export class ExtensionManager {
       this.registerFeatures()
       this.featureManager.initialize()
     }
-  }
-
-  /**
-   * Set up listener for navigation events
-   */
-  private setupNavigationListener(): void {
-    chrome.runtime.onMessage.addListener((message) => {
-      if (message.type === "NAVIGATION") {
-        this.cleanup()
-        // Reset managers after cleanup
-        this.mutationObserver = new MutationObserverService()
-        this.featureManager = new FeatureManager()
-      }
-    })
   }
 
   /**

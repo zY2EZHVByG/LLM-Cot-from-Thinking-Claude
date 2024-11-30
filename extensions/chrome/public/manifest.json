@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Thinking Claude",
-  "version": "3.1.5",
+  "version": "3.1.4",
   "description": "Chrome extension for letting Claude think like a real human",
   "background": {
     "service_worker": "background.js"
