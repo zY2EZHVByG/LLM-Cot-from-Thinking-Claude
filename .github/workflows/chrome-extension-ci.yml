@@ -90,13 +90,13 @@ jobs:
             if [[ ! -f "$file" ]]; then
               echo "Error: File $file not found"
               exit 1
-            }
+            fi
             
             # Check if version field exists
             if ! grep -q "\"version\":" "$file"; then
               echo "Error: No version field found in $file"
               exit 1
-            }
+            fi
             
             # Backup file before modification
             cp "$file" "${file}.bak"
