@@ -2,6 +2,25 @@
 
 # Changelog of the extensions
 
+## ci: - 11/30/2024 - @lumpinif
+
+### Chrome Extension CI Improvements
+
+- Enhanced version management in GitHub Actions workflow
+  - Added robust semver validation supporting x.y.z and pre-release versions
+  - Implemented automatic patch version increment for existing versions
+  - Added support for pre-release versions (beta) with auto-increment
+  - Added version downgrade prevention with clear error messages
+  - Improved error handling for file operations and git commands
+  - Added backup mechanism for safe version updates
+  - Enhanced logging for better debugging and transparency
+
+### File Operations
+
+- Added safe JSON file updates with backup mechanism
+- Improved handling of package.json and manifest.json version updates
+- Added validation for version field existence in JSON files
+
 ## fix: - 11/30/2024 - @lumpinif
 
 ### Feature Cleanup & Navigation
