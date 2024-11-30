@@ -1,5 +1,10 @@
 # Changelog
 
+## 2024-12-01
+
+- Update v5.1-extensive version to latest 20241201 version.
+    - Some small updates to make the results more robust (maybe).
+
 ## 2024-11-29
 
 - Some small updates on v5.1-extensive version.
