@@ -1,2 +1,2 @@
-Version Bumping Test File
+Version Bumping Test
 v3.1.4
