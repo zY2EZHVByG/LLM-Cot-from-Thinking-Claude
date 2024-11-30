@@ -14,9 +14,6 @@ export class ExtensionManager {
   constructor() {
     this.mutationObserver = new MutationObserverService()
     this.featureManager = new FeatureManager()
-
-    this.registerFeatures()
-    this.setupNavigationListener()
   }
 
   /**
@@ -38,22 +35,13 @@ export class ExtensionManager {
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () => {
+        this.registerFeatures()
         this.featureManager.initialize()
       })
     } else {
+      this.registerFeatures()
       this.featureManager.initialize()
     }
-  }
-
-  /**
-   * Set up listener for navigation events
-   */
-  private setupNavigationListener(): void {
-    chrome.runtime.onMessage.addListener((message) => {
-      if (message.type === "NAVIGATION") {
-        this.featureManager.cleanup()
-      }
-    })
   }
 
   /**
@@ -61,5 +49,6 @@ export class ExtensionManager {
    */
   cleanup(): void {
     this.featureManager.cleanup()
+    this.mutationObserver.cleanup()
   }
 }

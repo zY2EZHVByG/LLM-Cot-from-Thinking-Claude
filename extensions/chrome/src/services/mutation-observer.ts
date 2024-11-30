@@ -55,7 +55,7 @@ export class MutationObserverService {
     })
   }
 
-  /* service-level cleanup but we don't usually need this */
+  /* service-level cleanup for cleaning the observer */
   cleanup() {
     // 1. Disconnect the MutationObserver
     this.observer?.disconnect()
