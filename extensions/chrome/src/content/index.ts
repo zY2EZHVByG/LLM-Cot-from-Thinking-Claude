@@ -1,5 +1,3 @@
-import "@/styles/globals.css"
-
 import { ExtensionManager } from "./v3/managers/extension-manager"
 
 // Create a single instance of ExtensionManager
