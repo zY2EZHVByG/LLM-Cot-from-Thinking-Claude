@@ -2,6 +2,23 @@
 
 # Changelog of the extensions
 
+## feat: CSS Architecture - 12/1/2024 - @lumpinif
+
+### Modular CSS Architecture Implementation
+
+- Established new modular CSS architecture for better feature isolation
+  - Introduced feature-specific CSS modules starting with thinking-block
+  - Set up base styles directory for shared Tailwind utilities
+  - Improved organization and maintainability of styles
+  - Added support for future feature-specific styling needs
+
+### Build System Updates
+
+- Enhanced webpack configuration for CSS handling
+  - Integrated MiniCssExtractPlugin for optimized CSS delivery
+  - Updated manifest.json to reflect new CSS structure
+  - Removed legacy styles.css in favor of modular approach
+
 ## ci: - 11/30/2024 - @lumpinif
 
 ### Chrome Extension CI Improvements

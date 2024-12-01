@@ -36,11 +36,6 @@ export class FeatureManager {
    * Clean up all features
    */
   cleanup(): void {
-    // Remove data-tc-processed attributes from thinking block controls
-    document.querySelectorAll("[data-tc-processed]").forEach((element) => {
-      element.removeAttribute("data-tc-processed")
-    })
-
     this.cleanupFunctions.forEach((cleanup, id) => {
       try {
         cleanup()

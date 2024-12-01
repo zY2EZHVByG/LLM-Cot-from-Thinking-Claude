@@ -1,4 +1,4 @@
-import "@/styles/globals.css"
+import "@/styles/index.css"
 
 import { ExtensionManager } from "./v3/managers/extension-manager"
 
