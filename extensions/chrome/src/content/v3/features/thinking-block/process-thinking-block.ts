@@ -20,8 +20,8 @@ function processControl(control: Element) {
     ?.querySelector(".code-block__code")
   if (!thinkingBlock) return
 
-  if (!resContainer.hasAttribute("data-thinking-block-state")) {
-    resContainer.setAttribute("data-thinking-block-state", "expanded")
+  if (!resContainer.hasAttribute("data-tc-thinking-block-state")) {
+    resContainer.setAttribute("data-tc-thinking-block-state", "expanded")
   }
 
   setupControls(control as HTMLElement, thinkingBlock, resContainer)

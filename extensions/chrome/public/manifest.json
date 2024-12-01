@@ -1,13 +1,16 @@
 {
   "manifest_version": 3,
   "name": "Thinking Claude",
-  "version": "3.1.3",
+  "version": "3.1.5",
   "description": "Chrome extension for letting Claude think like a real human",
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://*.claude.ai/*"],
       "js": ["content.js"],
-      "css": ["styles.css"]
+      "css": ["content.css"]
     }
   ],
   "icons": {
@@ -23,5 +26,5 @@
     },
     "default_title": "Thinking Claude"
   },
-  "permissions": ["storage"]
+  "permissions": ["storage", "webNavigation", "tabs"]
 }

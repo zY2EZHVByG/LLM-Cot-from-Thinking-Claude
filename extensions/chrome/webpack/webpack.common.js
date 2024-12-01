@@ -2,6 +2,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 import CopyPlugin from "copy-webpack-plugin"
+import MiniCssExtractPlugin from "mini-css-extract-plugin"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -9,7 +10,7 @@ const __dirname = path.dirname(__filename)
 export default {
   entry: {
     // popup: path.resolve(__dirname, '..', 'src', 'popup', 'index.tsx'), //popup is not being developed yet
-    // background: path.resolve(__dirname, '..', 'src', 'background', 'index.ts'), //background is not being developed yet
+    background: path.resolve(__dirname, "..", "src", "background", "index.ts"),
     content: path.resolve(__dirname, "..", "src", "content", "index.ts"),
   },
   module: {
@@ -30,21 +31,14 @@ export default {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
               importLoaders: 1,
             },
           },
-          {
-            loader: "postcss-loader",
-            options: {
-              postcssOptions: {
-                config: path.resolve(__dirname, "..", "postcss.config.cjs"),
-              },
-            },
-          },
+          "postcss-loader",
         ],
       },
     ],
@@ -61,11 +55,16 @@ export default {
     clean: true,
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, "..", "public"),
           to: path.resolve(__dirname, "..", "dist"),
+          globOptions: {
+            ignore: ["**/*.css"], // Ignore CSS files
+            patterns: ["**/*.{html,json,png,svg,ico}"], // Only copy specific file types
+          },
         },
       ],
     }),

@@ -11,7 +11,7 @@ export class FeatureManager {
    */
   register(feature: Feature): void {
     if (this.features.has(feature.id)) {
-      throw new Error(`Feature with id ${feature.id} already exists`)
+      throw new Error(`[TC] Feature with id ${feature.id} already exists`)
     }
     this.features.set(feature.id, feature)
   }
@@ -27,7 +27,7 @@ export class FeatureManager {
           this.cleanupFunctions.set(id, cleanup)
         }
       } catch (error) {
-        console.error(`Failed to initialize feature ${id}:`, error)
+        console.error(`[TC] Failed to initialize feature ${id}:`, error)
       }
     })
   }
@@ -40,7 +40,7 @@ export class FeatureManager {
       try {
         cleanup()
       } catch (error) {
-        console.error(`Failed to cleanup feature ${id}:`, error)
+        console.error(`[TC] Failed to cleanup feature ${id}:`, error)
       }
     })
     this.cleanupFunctions.clear()

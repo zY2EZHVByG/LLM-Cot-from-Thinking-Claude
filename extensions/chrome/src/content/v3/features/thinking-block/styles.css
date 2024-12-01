@@ -17,9 +17,7 @@ div[data-is-streaming] pre:first-child .code-block__code {
   transition: all 0.3s ease-out !important;
 }
 
-/* collapsed states */
-
-/* Collapsed state */
+/* Collapsed states */
 div[data-is-streaming] pre:first-child .code-block__code.collapsed {
   height: 0 !important;
   padding: 0 !important;
@@ -28,7 +26,7 @@ div[data-is-streaming] pre:first-child .code-block__code.collapsed {
 }
 
 /* Collapsed state */
-[data-thinking-block-state="collapsed"]
+[data-tc-thinking-block-state="collapsed"]
   div[data-is-streaming]
   pre:first-child
   .code-block__code {
@@ -39,7 +37,7 @@ div[data-is-streaming] pre:first-child .code-block__code.collapsed {
 }
 
 /* Expanded state */
-/* [data-thinking-block-state="expanded"] div[data-is-streaming] pre:first-child .code-block__code {
+/* [data-tc-thinking-block-state="expanded"] div[data-is-streaming] pre:first-child .code-block__code {
   height: 50vh !important;
   padding: 1em !important;
   visibility: visible !important;
@@ -105,7 +103,7 @@ div[data-is-streaming]
 
 /* Update the text of the header */
 
-div[data-thinking-block-state="collapsed"]
+div[data-tc-thinking-block-state="collapsed"]
   pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
   content: "View Claude's thinking" !important;
@@ -127,7 +125,7 @@ div[data-is-streaming]
 
 /* Hover state */
 /* This implementation is limited. We can consider to disable this hover state. */
-[data-thinking-block-state="expanded"]
+[data-tc-thinking-block-state="expanded"]
   pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty):hover::after {
   color: hsl(var(--text-100));
@@ -175,6 +173,13 @@ pre:first-child
   transition: transform 0.25s ease-out;
 }
 
+/* Chevron animation */
+[data-tc-thinking-block-state="collapsed"]
+  pre:first-child
+  .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
+  transform: rotate(180deg) !important;
+}
+
 /* --------------------------------- */
 
 /* Shimmer animation for streaming state */
@@ -188,11 +193,3 @@ pre:first-child
 }
 
 /* --------------------------------- */
-
-/* Chevron animation */
-
-[data-thinking-block-state="collapsed"]
-  pre:first-child
-  .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
-  transform: rotate(180deg);
-}
