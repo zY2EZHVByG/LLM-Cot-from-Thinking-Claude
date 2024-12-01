@@ -1,4 +1,5 @@
 import type { MutationObserverService } from "@/services/mutation-observer"
+import { shouldInitialize } from "@/utils/url-utils"
 
 import { BaseFeature } from "../base-feature"
 import { processThinkingBlocks } from "./process-thinking-block"
@@ -21,6 +22,10 @@ export class TCThinkingBlock extends BaseFeature {
    * @returns Cleanup function to unsubscribe from mutation observer and remove custom attributes
    */
   initialize(): void | (() => void) {
+    if (!shouldInitialize(window.location.href)) {
+      return
+    }
+
     this.mutationObserver.initialize()
 
     const unsubscribe = this.mutationObserver.subscribe(processThinkingBlocks)
