@@ -10,7 +10,7 @@
     {
       "matches": ["https://*.claude.ai/*"],
       "js": ["content.js"],
-      "css": ["styles.css"]
+      "css": ["content.css"]
     }
   ],
   "icons": {
