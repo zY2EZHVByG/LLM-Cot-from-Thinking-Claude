@@ -28,7 +28,7 @@ div[data-is-streaming] pre:first-child .code-block__code.collapsed {
 }
 
 /* Collapsed state */
-[data-thinking-block-state="collapsed"]
+[data-tc-thinking-block-state="collapsed"]
   div[data-is-streaming]
   pre:first-child
   .code-block__code {
@@ -39,7 +39,7 @@ div[data-is-streaming] pre:first-child .code-block__code.collapsed {
 }
 
 /* Expanded state */
-/* [data-thinking-block-state="expanded"] div[data-is-streaming] pre:first-child .code-block__code {
+/* [data-tc-thinking-block-state="expanded"] div[data-is-streaming] pre:first-child .code-block__code {
   height: 50vh !important;
   padding: 1em !important;
   visibility: visible !important;
@@ -105,7 +105,7 @@ div[data-is-streaming]
 
 /* Update the text of the header */
 
-div[data-thinking-block-state="collapsed"]
+div[data-tc-thinking-block-state="collapsed"]
   pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::after {
   content: "View Claude's thinking" !important;
@@ -127,7 +127,7 @@ div[data-is-streaming]
 
 /* Hover state */
 /* This implementation is limited. We can consider to disable this hover state. */
-[data-thinking-block-state="expanded"]
+[data-tc-thinking-block-state="expanded"]
   pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty):hover::after {
   color: hsl(var(--text-100));
@@ -191,7 +191,7 @@ pre:first-child
 
 /* Chevron animation */
 
-[data-thinking-block-state="collapsed"]
+[data-tc-thinking-block-state="collapsed"]
   pre:first-child
   .text-text-300.absolute.pl-3.pt-2\.5.text-xs:not(:empty)::before {
   transform: rotate(180deg);

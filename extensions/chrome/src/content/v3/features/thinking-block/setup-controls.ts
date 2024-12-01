@@ -4,9 +4,10 @@ export function setupControls(
   resContainer: Element
 ) {
   const copyButton = control.querySelector("button")
-
   if (!copyButton) return
+
   copyButton.classList.add("tc-select-none")
+
   copyButton.addEventListener(
     "click",
     async (e) => {
@@ -17,11 +18,13 @@ export function setupControls(
   )
 
   control.addEventListener("click", () => {
-    const currentState = resContainer.getAttribute("data-thinking-block-state")
+    const currentState = resContainer.getAttribute(
+      "data-tc-thinking-block-state"
+    )
 
     // Update the collapse state of thinking block in the response container
     const newState = currentState === "expanded" ? "collapsed" : "expanded"
-    resContainer.setAttribute("data-thinking-block-state", newState)
+    resContainer.setAttribute("data-tc-thinking-block-state", newState)
 
     // Toggle the collapse state of the thinking block as fallback
     thinkingBlock.classList.toggle("collapsed")

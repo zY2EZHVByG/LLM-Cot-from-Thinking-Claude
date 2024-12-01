@@ -18,7 +18,7 @@ export class TCThinkingBlock extends BaseFeature {
   /**
    * Initialize the thinking block feature
    * Sets up mutation observer to watch for new thinking blocks
-   * @returns Cleanup function to unsubscribe from mutation observer
+   * @returns Cleanup function to unsubscribe from mutation observer and remove custom attributes
    */
   initialize(): void | (() => void) {
     this.mutationObserver.initialize()
@@ -28,6 +28,14 @@ export class TCThinkingBlock extends BaseFeature {
     return () => {
       // Unsubscribe from mutation observer
       unsubscribe()
+
+      // Clean up all feature-specific attributes
+      document
+        .querySelectorAll("[data-tc-processed]")
+        .forEach((el) => el.removeAttribute("data-tc-processed"))
+      document
+        .querySelectorAll("[data-tc-thinking-block-state]")
+        .forEach((el) => el.removeAttribute("data-tc-thinking-block-state"))
     }
   }
 }
