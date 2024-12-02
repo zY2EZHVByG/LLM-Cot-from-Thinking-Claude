@@ -3,8 +3,9 @@ import React from "react"
 import { GITHUB_API_URL } from "@/constants/constants"
 import { extractDescription } from "@/utils/extract-description"
 import { formatLabel } from "@/utils/format"
+import { insertTextIntoClaudeInput } from "@/utils/insert-text"
 
-import { ModelInstruction } from "@/components/instruction-select"
+import { ModelInstruction } from "@/components/instruction-selector"
 
 interface GitHubFile {
   name: string
@@ -118,6 +119,12 @@ export const useModelInstructions = () => {
     }
   }
 
+  const handleInstructionSelect = async (instruction: ModelInstruction) => {
+    if (instruction.content) {
+      await insertTextIntoClaudeInput(instruction.content)
+    }
+  }
+
   React.useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
@@ -145,5 +152,11 @@ export const useModelInstructions = () => {
     }
   }, [])
 
-  return { instructions, isLoading, error, starsCount }
+  return {
+    instructions,
+    isLoading,
+    error,
+    starsCount,
+    handleInstructionSelect,
+  }
 }

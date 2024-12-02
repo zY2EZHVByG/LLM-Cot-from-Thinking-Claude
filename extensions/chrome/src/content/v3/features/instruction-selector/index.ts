@@ -3,7 +3,7 @@ import { shouldInitialize } from "@/utils/url-utils"
 
 import { BaseFeature } from "../base-feature"
 import {
-  cleanupSelectDemo,
+  cleanupInputContainer,
   processInputContainer,
 } from "./process-input-container"
 
@@ -27,22 +27,17 @@ export class TCInstructionSelector extends BaseFeature {
     if (!shouldInitialize(window.location.href, "new")) {
       return
     }
-    console.log("[TC] 📝 ~ TCInstructionSelector initialized")
 
     this.mutationObserver.initialize()
 
-    const unsubscribe = this.mutationObserver.subscribe(processInputContainer)
-
-    // Initial check
-    processInputContainer()
+    // Subscribe to both input container changes and content changes
+    const unsubscribeContainer = this.mutationObserver.subscribe(
+      processInputContainer
+    )
 
     return () => {
-      unsubscribe()
-      // Clean up feature-specific attributes
-      document
-        .querySelectorAll("[data-tc-input-container]")
-        .forEach((el) => el.removeAttribute("data-tc-input-container"))
-      cleanupSelectDemo()
+      unsubscribeContainer()
+      cleanupInputContainer()
     }
   }
 }

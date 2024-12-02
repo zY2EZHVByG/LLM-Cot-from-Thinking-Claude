@@ -17,9 +17,9 @@ export class ExtensionManager {
     this.defaultMutationObserver = new MutationObserverService()
     this.inputObserver = new MutationObserverService({
       childList: true,
-      subtree: false,
+      subtree: true,
       attributes: true, // Watch for attribute changes
-      // debounceTime: 200,
+      debounceTime: 500,
     })
     this.featureManager = new FeatureManager()
   }
@@ -45,7 +45,6 @@ export class ExtensionManager {
     }
 
     const initializeFeatures = () => {
-      console.log("[TC] 🚀 Initializing features...")
       this.registerFeatures()
       this.featureManager.initialize()
       this.isInitialized = true

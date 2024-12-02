@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { formatStarCount } from "@/utils/format"
+import { insertTextIntoClaudeInput } from "@/utils/insert-text"
 import { GitHubLogoIcon, StarFilledIcon } from "@radix-ui/react-icons"
 
 import { cn } from "@/lib/utils"
@@ -16,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { useContentSync } from "../../hooks/use-content-sync"
 import { InstructionDescription } from "./instruction-description"
 import { InstructionItem } from "./instruction-item"
 
@@ -40,16 +42,36 @@ const LoadingState = ({ isLoading }: { isLoading: boolean }) => (
 )
 
 export function InstructionSelect() {
-  const [key, setKey] = React.useState(() => Date.now())
-  const [value, setValue] = React.useState<string>("")
+  const [value, setValue] = React.useState("")
+  const [key, setKey] = React.useState(Date.now())
   const [hoveredInstruction, setHoveredInstruction] =
     React.useState<ModelInstruction | null>(null)
-  const { instructions, isLoading, starsCount, error } = useModelInstructions()
+  const {
+    instructions,
+    isLoading,
+    starsCount,
+    handleInstructionSelect,
+    error,
+  } = useModelInstructions()
 
-  const handleClear = (e: React.MouseEvent) => {
+  useContentSync({
+    instructions,
+    onValueChange: setValue,
+    onKeyChange: () => setKey(Date.now()),
+  })
+
+  const handleClear = async (e: React.MouseEvent) => {
     e.stopPropagation()
     setValue("")
     setKey(Date.now())
+    await insertTextIntoClaudeInput("")
+  }
+
+  const handleInstructionClick = async (instruction: ModelInstruction) => {
+    if (instruction.content) {
+      setValue(instruction.value)
+      await handleInstructionSelect(instruction)
+    }
   }
 
   const selectedInstruction = instructions.find((inst) => inst.value === value)
@@ -61,7 +83,15 @@ export function InstructionSelect() {
 
   return (
     <div className="tc-min-w-24">
-      <Select key={key} value={value} onValueChange={setValue}>
+      <Select
+        key={key}
+        value={value}
+        onValueChange={(value) => {
+          handleInstructionClick(
+            instructions.find((inst) => inst.value === value)!
+          )
+        }}
+      >
         <SelectTrigger className="inline-flex items-center justify-center relative shrink-0 ring-offset-2 ring-offset-bg-300 ring-accent-main-100 focus-visible:outline-none focus-visible:ring-1 tc-shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:drop-shadow-none max-w-full min-w-0 pl-1.5 pr-1 h-7 ml-0.5 mr-1 hover:bg-bg-200 hover:border-border-400 border-0.5 text-sm rounded-md border-transparent transition text-text-500 hover:text-text-200 font-tiempos !tc-font-normal tc-gap-x-1">
           <SelectValue placeholder="Let Claude think" />
         </SelectTrigger>

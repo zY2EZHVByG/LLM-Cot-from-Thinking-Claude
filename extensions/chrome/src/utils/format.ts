@@ -10,3 +10,12 @@ export const formatStarCount = (count: number): string => {
   }
   return count.toString()
 }
+
+/**
+ * Normalizes content by removing extra whitespace and trimming
+ * @param content - The content string to normalize
+ * @returns Normalized content string
+ */
+export const normalizeContent = (content: string): string => {
+  return content.replace(/\s+/g, " ").trim()
+}
