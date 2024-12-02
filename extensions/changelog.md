@@ -2,6 +2,19 @@
 
 # Changelog of the extensions
 
+## feat: Instruction Selector - 12/2/2024 - @lumpinif
+
+### New Feature Implementation
+
+- Added instruction selector feature for enhanced user interaction
+  - Implemented quick instruction selection capability
+  - Improved text insertion reliability
+  - Restructured initialization logic for better feature scoping
+
+### Version Update
+
+- Bumped version to 3.2.0 to reflect new feature addition
+
 ## feat: CSS Architecture - 12/1/2024 - @lumpinif
 
 ### Modular CSS Architecture Implementation

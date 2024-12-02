@@ -1,6 +1,6 @@
 import { MutationObserverService } from "@/services/mutation-observer"
-import { shouldInitialize } from "@/utils/url-utils"
 
+import { TCInstructionSelector } from "../features/instruction-selector"
 import { TCThinkingBlock } from "../features/thinking-block"
 import { FeatureManager } from "./feature-manager"
 
@@ -9,10 +9,18 @@ import { FeatureManager } from "./feature-manager"
  */
 export class ExtensionManager {
   private featureManager: FeatureManager
-  private mutationObserver: MutationObserverService
+  private defaultMutationObserver: MutationObserverService
+  private inputObserver: MutationObserverService
+  private isInitialized = false
 
   constructor() {
-    this.mutationObserver = new MutationObserverService()
+    this.defaultMutationObserver = new MutationObserverService()
+    this.inputObserver = new MutationObserverService({
+      childList: true,
+      subtree: true,
+      attributes: true, // Watch for attribute changes
+      debounceTime: 500,
+    })
     this.featureManager = new FeatureManager()
   }
 
@@ -21,26 +29,33 @@ export class ExtensionManager {
    */
   private registerFeatures(): void {
     // Register features with their required services
-    this.featureManager.register(new TCThinkingBlock(this.mutationObserver))
-    // Add more features here
+    this.featureManager.register(
+      new TCThinkingBlock(this.defaultMutationObserver)
+    )
+    this.featureManager.register(new TCInstructionSelector(this.inputObserver))
   }
 
   /**
    * Initialize the extension if conditions are met
    */
   initialize(): void {
-    if (!shouldInitialize(window.location.href)) {
+    if (this.isInitialized) {
+      console.log("[TC] 🔄 Features already initialized, skipping...")
       return
     }
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => {
-        this.registerFeatures()
-        this.featureManager.initialize()
-      })
-    } else {
+    const initializeFeatures = () => {
       this.registerFeatures()
       this.featureManager.initialize()
+      this.isInitialized = true
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeFeatures, {
+        once: true,
+      })
+    } else {
+      initializeFeatures()
     }
   }
 
@@ -49,6 +64,8 @@ export class ExtensionManager {
    */
   cleanup(): void {
     this.featureManager.cleanup()
-    this.mutationObserver.cleanup()
+    this.defaultMutationObserver.cleanup()
+    this.inputObserver.cleanup()
+    this.isInitialized = false
   }
 }
