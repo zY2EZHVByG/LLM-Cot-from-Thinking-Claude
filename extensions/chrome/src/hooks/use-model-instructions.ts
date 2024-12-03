@@ -23,7 +23,6 @@ export const useModelInstructions = () => {
 
   const fetchModelInstructions = async (signal: AbortSignal) => {
     try {
-      setIsLoading(true)
       setError(null)
 
       const response = await fetch(GITHUB_API_URL, { signal })
@@ -95,8 +94,6 @@ export const useModelInstructions = () => {
         err instanceof Error ? err.message : "Failed to load model instructions"
       )
       setInstructions([])
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -140,6 +137,11 @@ export const useModelInstructions = () => {
           fetchStarsCount(signal),
           fetchModelInstructions(signal),
         ])
+      } catch (err) {
+        // Handle any errors from the parallel fetches
+        if (err instanceof Error && err.name !== "AbortError") {
+          console.error("Error during parallel fetches:", err)
+        }
       } finally {
         setIsLoading(false)
       }
