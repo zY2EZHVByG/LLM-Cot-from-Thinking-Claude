@@ -2,6 +2,15 @@
 
 # Changelog of the extensions
 
+## fix: Instruction Selector Loading State - 12/3/2024 - @lumpinif
+
+### Bug Fixes
+
+- Improved loading state handling in instruction selector
+  - Fixed loading state visibility during data fetching
+  - Added empty state check to prevent UI flickering
+  - Enhanced state transitions between loading and loaded states
+
 ## feat: Instruction Selector - 12/2/2024 - @lumpinif
 
 ### New Feature Implementation
