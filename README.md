@@ -1,3 +1,5 @@
+Forked from https://github.com/richards199999/Thinking-Claude/tree/main
+
 # Thinking Claude
 
 Let Claude think comprehensively before responding!
